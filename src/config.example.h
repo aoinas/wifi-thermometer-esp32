@@ -8,3 +8,6 @@
 
 // OpenWeatherMap
 #define OPEN_WEATHER_MAP_API_KEY "OpenWeatherMap API key goes here"
+
+// If your board does not have display, comment this
+#define USE_DISPLAY

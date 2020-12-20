@@ -1,14 +1,16 @@
 #include <Arduino.h>
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+
 #include "WiFi.h"
 #include "ThingSpeak.h"
 #include "DHT.h"
 
 #include "owmHelper.h"
 #include "config.h"
-#include "displayHelper.h"
+
+#ifdef USE_DISPLAY
+#include "displayManager.h"
+DisplayManager m_DisplayManager;
+#endif
 
 // Temp & moisture sensor
 #define DHTPIN 16
@@ -17,13 +19,8 @@
 #define WIFI_TIMEOUT_MS 20000
 #define DEEP_SLEEP_TIME_MIN 1
 
-// OLED Display
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
-
-
 WiFiClient client;
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+
 OwmHelper owm(client);
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -64,15 +61,13 @@ void setup() {
   Serial.begin(9600);
   pinMode(LED_BUILTIN, OUTPUT);
 
-  Wire.begin(5, 4);
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false, false)) { 
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;);
-  }
+  #ifdef USE_DISPLAY
+  m_DisplayManager.Begin();
+  #endif
 
   dht.begin();
 
-  showSplashScreen(display);
+  
   delay(2000);
 
 
@@ -95,16 +90,13 @@ void setup() {
   //goToDeepSleep();
 }
 
-bool inverted = true;
-
 void loop() {
-  float h = dht.readHumidity();
-// Read temperature as Celsius (the default)
-  float t = dht.readTemperature();
-
-  showMainScreen(display, t, h);
-  delay(5000);
-  display.invertDisplay(inverted);
   
-  inverted = !inverted;
+  float t = dht.readTemperature(); // In celsius
+  float h = dht.readHumidity();
+
+  #ifdef USE_DISPLAY
+  m_DisplayManager.OnNewMeasurement(t, h);
+  #endif
+
 }

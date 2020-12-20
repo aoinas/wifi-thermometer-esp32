@@ -47,7 +47,7 @@ void showMainScreen(Adafruit_SSD1306& display, const float temperature, const fl
     display.setCursor(5, 5);
     display.print( String(temperature,1) );
     display.println( "`C" );
-
+    
     // Humidity value
     display.setTextSize(3); 
     display.setCursor(5, 32);
