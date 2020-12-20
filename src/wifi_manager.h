@@ -13,9 +13,9 @@ class WifiManager
 
     }
 
-    void connectToWifi()
+    bool ConnectToWifi()
     {
-        Serial.print("Connecting to WiFi");
+        Serial.println("Connecting to WiFi");
         WiFi.mode(WIFI_STA);
         WiFi.begin(WIFI_NETWORK, WIFI_PASS);
 
@@ -31,15 +31,17 @@ class WifiManager
         if ( WiFi.status() != WL_CONNECTED )
         {
             Serial.print("failed");
+            return false;
         }  
         else 
         {
             Serial.print("Connected ");
             Serial.println(WiFi.localIP());
+            return true;
         }
     }
 
-    WiFiClient& getWifiClient()
+    WiFiClient& GetWifiClient()
     {
         return m_Client;
     }

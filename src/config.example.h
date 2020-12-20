@@ -9,5 +9,12 @@
 // OpenWeatherMap
 #define OPEN_WEATHER_MAP_API_KEY "OpenWeatherMap API key goes here"
 
+// Temp & moisture sensor
+#define DHTPIN 16
+
 // If your board does not have display, comment this
 #define USE_DISPLAY
+
+// How frequently results are reported to ThingSpeak (in minutes)
+#define PUBLISH_TO_WEB_DELAY 60
+

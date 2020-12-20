@@ -1,12 +1,9 @@
 #include <Arduino.h>
 
-#include "ThingSpeak.h"
-
-#include "owmHelper.h"
 #include "config.h"
-#include "wifi_manager.h"
-#include "measurement_taker.h"
 
+#include "measurement_taker.h"
+#include "thingspeak_publisher.h"
 
 #ifdef USE_DISPLAY
 #include "displayManager.h"
@@ -15,9 +12,10 @@ DisplayManager m_DisplayManager;
 
 #define DEEP_SLEEP_TIME_MIN 1
 
-WifiManager m_WifiManager;
-OwmHelper owm(m_WifiManager.getWifiClient());
+using namespace wifi_thermometer;
+
 MeasurementTaker measurement_taker;
+ThingSpeakPublisher measurement_publisher;
 
 void goToDeepSleep()
 {
@@ -31,32 +29,15 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
 
   measurement_taker.Begin();
+  measurement_taker.Subscribe(&measurement_publisher);
 
   #ifdef USE_DISPLAY
   m_DisplayManager.Begin();
   measurement_taker.Subscribe(&m_DisplayManager);
   #endif
-
   
   delay(2000);
 
-
-
-/*
-  connectToWifi();
-
-  if ( WiFi.isConnected() )
-  {
-    Serial.println("Sending data to ThingSpeak");
-    ThingSpeak.begin(client);
-
-    ThingSpeak.setField(1, WiFi.RSSI());
-    ThingSpeak.writeFields(CHANNEL_ID, CHANNEL_API_KEY);
-  }
-  else
-    Serial.println("Not connected to WiFi. Unable to send data to ThingSpeak");
-    */
-  
   //goToDeepSleep();
 }
 

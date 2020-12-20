@@ -1,7 +1,9 @@
 #pragma once
 
+#include "measurement.h"
+
 class MeasurementObserverInterface
 {
     public:
-    virtual void OnNewMeasurement(const float& temperature, const float& humidity) = 0;
+    virtual void OnNewMeasurement(const Measurement& measurement) = 0;
 };

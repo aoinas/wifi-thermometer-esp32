@@ -30,17 +30,15 @@ class MeasurementTaker
 
     void Measure()
     {
-        float temperature = sensor_.readTemperature(); // In celsius
-        float humidity = sensor_.readHumidity();
-
+        Measurement m(  sensor_.readTemperature(),
+                        sensor_.readHumidity() );
+        
         // Notify observers on new measurements
         for (auto observer : observers_)
         {
-            observer->OnNewMeasurement(temperature, humidity);
+            observer->OnNewMeasurement(m);
         }
-
     }
-
 
     private:
     std::vector<MeasurementObserverInterface*> observers_;

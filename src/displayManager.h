@@ -31,9 +31,9 @@ class DisplayManager : public MeasurementObserverInterface
         return true;
     }
 
-    void OnNewMeasurement(const float& temperature, const float& humidity) override
+    void OnNewMeasurement(const Measurement& measurement) override
     {
-        showMainScreen(display_, temperature, humidity);
+        showMainScreen(display_, measurement.temperature_, measurement.humidity_);
     }
 
     Adafruit_SSD1306& getDisplay()
